@@ -6,8 +6,6 @@
 //  Copyright © 2020 Guillaume Blanchet. All rights reserved.
 //
 
-// Coucou
-
 import UIKit
 
 class FilmsController: UIViewController  {

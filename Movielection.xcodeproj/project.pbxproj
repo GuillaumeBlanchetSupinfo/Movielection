@@ -40,6 +40,7 @@
 		245C53D2240AE4CC00EA6E2B /* Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245C53D0240AE4CC00EA6E2B /* Extention.swift */; };
 		245D1F8824334F1100AC6D1A /* FilmsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245D1F8724334F1100AC6D1A /* FilmsViewModel.swift */; };
 		245D1F8924334FDA00AC6D1A /* LoadCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2412F7C1241EB07A00439C29 /* LoadCollection.swift */; };
+		247102A82436554000511E77 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 247102A72436554000511E77 /* WebKit.framework */; };
 		2477B97A2422937E006CD279 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2412F7BB241A411B00439C29 /* Protocols.swift */; };
 		2477B97B24229388006CD279 /* TrailerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242AFD0E24221A3900131CC0 /* TrailerController.swift */; };
 		2477B97C2422939E006CD279 /* TrailerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242AFD1024221C3E00131CC0 /* TrailerViewModel.swift */; };
@@ -93,6 +94,7 @@
 		245C53CD240ACEA400EA6E2B /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		245C53D0240AE4CC00EA6E2B /* Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extention.swift; sourceTree = "<group>"; };
 		245D1F8724334F1100AC6D1A /* FilmsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsViewModel.swift; sourceTree = "<group>"; };
+		247102A72436554000511E77 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2477B97D242364C6006CD279 /* QRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRService.swift; sourceTree = "<group>"; };
 		2477B98024236C42006CD279 /* QRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRController.swift; sourceTree = "<group>"; };
 		2477B98324236D11006CD279 /* QRViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewModel.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				247102A82436554000511E77 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,12 +133,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		247102A62436553F00511E77 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				247102A72436554000511E77 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		247946B32408366F00390FBB = {
 			isa = PBXGroup;
 			children = (
 				247946BE2408366F00390FBB /* Movielection */,
 				247946D82408367600390FBB /* MovielectionTests */,
 				247946BD2408366F00390FBB /* Products */,
+				247102A62436553F00511E77 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
