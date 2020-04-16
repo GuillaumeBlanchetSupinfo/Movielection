@@ -10,79 +10,78 @@ import Foundation
 import AVFoundation
 
 class QRViewModel {
-    
+
+    var captureSession: AVCaptureSession!
+    var previewLayer: AVCaptureVideoPreviewLayer!
+    var observers : [QRDelegate] = [QRDelegate]()
+
     init() {}
     
-    func setUp(vc: QRController) {
-        guard let captureDevice = AVCaptureDevice.default(for: AVMediaType.video) else {
-            fatalError("No video device found")
-        }
-                              
+    func setUp(_ vc: QRController) {
+        vc.view.backgroundColor = .black
+        captureSession = AVCaptureSession()
+
+        guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
+        let videoInput: AVCaptureDeviceInput
+
         do {
-            // Get an instance of the AVCaptureDeviceInput class using the previous deivce object
-            let input = try AVCaptureDeviceInput(device: captureDevice)
-                   
-            // Initialize the captureSession object
-            let captureSession =  AVCaptureSession()
-                   
-            // Set the input device on the capture session
-            captureSession.addInput(input)
-                   
-            // Get an instance of ACCapturePhotoOutput class
-            let capturePhotoOutput = AVCapturePhotoOutput()
-            capturePhotoOutput.isHighResolutionCaptureEnabled = true
-                   
-            // Set the output on the capture session
-            captureSession.addOutput(capturePhotoOutput)
-            captureSession.sessionPreset = .high
-                   
-            // Initialize a AVCaptureMetadataOutput object and set it as the input device
-            let captureMetadataOutput = AVCaptureMetadataOutput()
-            captureSession.addOutput(captureMetadataOutput)
-                   
-            // Set delegate and use the default dispatch queue to execute the call back
-            captureMetadataOutput.setMetadataObjectsDelegate(vc, queue: DispatchQueue.main)
-            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
-                   
-            //Initialise the video preview layer and add it as a sublayer to the viewPreview view's layer
-            let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            videoPreviewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-            videoPreviewLayer.frame = vc.view.layer.bounds
-
-            //start video capture
-            captureSession.startRunning()
-                   
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
         } catch {
-            //If any error occurs, simply print it out
-            print(error)
             return
+        }
+
+        if (captureSession.canAddInput(videoInput)) {
+            captureSession.addInput(videoInput)
+        } else {
+            failed(vc)
+            return
+        }
+
+        let metadataOutput = AVCaptureMetadataOutput()
+
+        if (captureSession.canAddOutput(metadataOutput)) {
+            captureSession.addOutput(metadataOutput)
+
+            metadataOutput.setMetadataObjectsDelegate(vc, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [.qr]
+        } else {
+            failed(vc)
+            return
+        }
+
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.frame = vc.view.layer.bounds
+        previewLayer.videoGravity = .resizeAspectFill
+        vc.view.layer.addSublayer(previewLayer)
+
+        captureSession.startRunning()
+    }
+    
+    func start() {
+        if let session = captureSession, !session.isRunning {
+            captureSession.startRunning()
+        }
+    }
+    
+    func stop() {
+        if let session = captureSession, session.isRunning {
+            captureSession.stopRunning()
         }
     }
 
-    func cameraWithPosition(_ position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified)
-        for device in discoverySession.devices {
-            if device.position == position {
-                return device
-            }
+    func found(_ vc: QRController, code: String) {
+        for observer in observers {
+            observer.result(code.components(separatedBy: ","))
         }
-        return nil
+        vc.navigationController?.popViewController(animated: true)
     }
 
-    func readMetadata(_ metadataObjects: [AVMetadataObject]) {
-        // Check if the metadataObjects array is contains at least one object.
-        if metadataObjects.count == 0 {
-            return
-        }
-        // Get the metadata object.
-        let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
-        
-        if metadataObj.type == AVMetadataObject.ObjectType.qr {
-            if let outputString = metadataObj.stringValue {
-                DispatchQueue.main.async {
-                    print(outputString)
-                }
-            }
-        }
+    func failed(_ vc: QRController) {
+        Utils().showError(parentViewController: vc, value: "Your device does not support scanning a code from an item. Please use a device with a camera.")
+        captureSession = nil
+    }
+    
+    func registerListener(observer : QRDelegate) {
+        observers.append(observer)
     }
 }

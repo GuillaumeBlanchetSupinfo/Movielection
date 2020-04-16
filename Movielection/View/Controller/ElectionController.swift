@@ -10,10 +10,17 @@ import UIKit
 
 class ElectionController: UIViewController {
     let vm : ElectionViewModel = ElectionViewModel()
+    var alert: UIAlertController!
     @IBOutlet weak var collection: UICollectionView!
     @IBOutlet weak var randomMovie: UIButton!
     @IBAction func randomAction(_ sender: Any) {
         vm.showAlert(vc: self)
+    }
+    @IBAction func qrAction(_ sender: Any) {
+        guard let qrvc = storyboard?.instantiateViewController(identifier: "QRVC") as? QRController else {
+            return
+        }
+        vm.QRAction(self, qrvc)
     }
 }
 
@@ -60,5 +67,23 @@ extension ElectionController : UICollectionViewDelegate {
 extension ElectionController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (self.view.frame.size.width/2), height: (((self.view.frame.size.width/2)/2)*3))
+    }
+}
+
+// MARK: - Alert
+
+extension ElectionController {
+    func playLoader() {
+        alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.style = UIActivityIndicatorView.Style.medium
+        loadingIndicator.startAnimating();
+        alert.view.addSubview(loadingIndicator)
+        present(alert, animated: true, completion: nil)
+    }
+
+    func dismissLoader() {
+        alert.dismiss(animated: true, completion: nil)
     }
 }

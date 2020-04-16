@@ -23,7 +23,7 @@ class Api {
 
 extension Api {
 
-    func searchMovies(query: String, language: String, page: Int, adult: Bool, year: Int?, callback: @escaping(_ movies: [Movie], _ maxPage: Int) -> Void) {
+    func searchMovies(query: String, language: String, page: Int, adult: Bool, year: Int?, callback: @escaping(_ movies: [Movie], _ maxPage: Int, _ error: String? ) -> Void) {
         var movies : [Movie] = []
         var maxPage: Int = 0
         guard let url = URL(string: searchMoviesUrl+"api_key=\(API_KEY)&language=\(language)&query=\(query)&page=\(page)&include_adult=\(adult)") else {
@@ -50,12 +50,12 @@ extension Api {
                     }
                 }
             }
-            callback(movies, maxPage)
+            callback(movies, maxPage, error?.localizedDescription)
         }
         task.resume()
     }
     
-    func discoverMovies(language: String, page: Int, adult: Bool, callback: @escaping(_ movies: [Movie], _ maxPage: Int) -> Void) {
+    func discoverMovies(language: String, page: Int, adult: Bool, callback: @escaping(_ movies: [Movie], _ maxPage: Int, _ error: String?) -> Void) {
         var movies: [Movie] = []
         var maxPage: Int = 0
         guard let url = URL(string: discoverMoviesUrl+"api_key=\(API_KEY)&language=\(language)&sort_by=popularity.desc&page=\(page)&include_adult=\(adult)") else {
@@ -82,7 +82,7 @@ extension Api {
                     }
                 }
             }
-            callback(movies, maxPage)
+            callback(movies, maxPage, error?.localizedDescription)
         }
         task.resume()
     }
@@ -96,12 +96,14 @@ extension Api {
         request.httpMethod = "GET"
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
-            if let data = data, error == nil {
-                if let response = response as? HTTPURLResponse, response.statusCode == 200 {
-                    if let image = UIImage(data: data) {
-                        callback(image)
-                    }
-                }
+            if let data = data,
+                error == nil,
+                let response = response as? HTTPURLResponse,
+                response.statusCode == 200,
+                let image = UIImage(data: data) {
+                    callback(image)
+            } else {
+                callback(nil)
             }
         }
         task.resume()
@@ -117,29 +119,29 @@ extension Api {
         request.httpMethod = "GET"
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
-            if let data = data, error == nil {
-                if let response = response as? HTTPURLResponse, response.statusCode == 200 {
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: []),
-                       let dictionary = json as? [String: Any],
-                       let results = dictionary["results"] as? Array<Any> {
-                        if let info = results.first as? [String: Any] {
-                            guard let id = info["key"] as? String else {
-                                callback("")
-                                return
-                            }
-                            callback("https://www.youtube.com/embed/\(id)")
-                        }
-                    }
+            if let data = data,
+               error == nil,
+               let response = response as? HTTPURLResponse, response.statusCode == 200,
+               let json = try? JSONSerialization.jsonObject(with: data, options: []),
+               let dictionary = json as? [String: Any],
+               let results = dictionary["results"] as? Array<Any>,
+               let info = results.first as? [String: Any] {
+                guard let id = info["key"] as? String else {
+                    callback("")
+                    return
                 }
+                callback("https://www.youtube.com/embed/\(id)")
+            } else {
+                callback("")
             }
         }
         task.resume()
     }
 
-    func getMovie(id: Int, language: String, callback: @escaping(_ movies: [Movie]) -> Void) {
+    func getMovie(id: Int, language: String, callback: @escaping(_ movies: [Movie], _ error: String?) -> Void) {
         var movies: [Movie] = []
         guard let url = URL(string: movieUrl+"\(id)?api_key=\(API_KEY)&language=\(language)") else {
-            callback(movies)
+            callback(movies, nil)
             return
         }
         var request = URLRequest(url: url)
@@ -156,7 +158,7 @@ extension Api {
                     }
                 }
             }
-            callback(movies)
+            callback(movies, error?.localizedDescription)
         }
         task.resume()
     }

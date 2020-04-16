@@ -202,7 +202,7 @@ extension FilmsController {
         loadingIndicator.style = UIActivityIndicatorView.Style.medium
         loadingIndicator.startAnimating();
         alert.view.addSubview(loadingIndicator)
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 
     func dismissLoader() {

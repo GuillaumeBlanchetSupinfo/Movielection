@@ -15,7 +15,7 @@ class Movie {
     let title: String!
     let imgURI: String!
     let overview: String!
-    var img: UIImage?
+    var img: UIImage!
     var selected: Bool = false
 
     init(id: Int, title: String, imgURI: String, overview: String, img: UIImage?) {
@@ -23,6 +23,6 @@ class Movie {
         self.title = title
         self.imgURI = imgURI
         self.overview = overview
-        self.img = img
+        self.img = img ?? UIImage(named: "NotFound")
     }
 }

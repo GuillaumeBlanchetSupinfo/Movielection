@@ -22,3 +22,7 @@ protocol FilmDelegate {
 protocol ElectionDelegate {
     func delete(_ movie: Movie)
 }
+
+protocol QRDelegate {
+    func result(_ value: [String])
+}

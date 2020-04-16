@@ -25,9 +25,13 @@ class FilmsViewModel : FilmDelegate {
         vc.collection.frame.size = vc.view.frame.size
         vc.createSearchBar()
         vc.collectionRegister()
-        discover { (movies) in
-            self.moviesList.append(contentsOf: movies)
-            vc.collection.reloadData()
+        discover { (movies, error) in
+            if let error = error {
+                Utils().showError(parentViewController: vc, value: error)
+            } else {
+                self.moviesList.append(contentsOf: movies)
+                vc.collection.reloadData()
+            }
         }
     }
 
@@ -58,51 +62,56 @@ class FilmsViewModel : FilmDelegate {
         maxPage = 0
         searchText = nil
         vc.refreshControl.beginRefreshing()
-        discover { (movies) in
-            self.moviesList = []
-            self.moviesList.append(contentsOf: movies)
-            vc.collection.reloadData()
-            vc.refreshControl.endRefreshing()
+        discover { (movies, error) in
+            if let error = error {
+                Utils().showError(parentViewController: vc, value: error)
+                vc.refreshControl.endRefreshing()
+            } else {
+                self.moviesList = []
+                self.moviesList.append(contentsOf: movies)
+                vc.collection.reloadData()
+                vc.refreshControl.endRefreshing()
+            }
         }
     }
 
-    func search(query: String, callback: @escaping ([Movie]) -> Void) {
+    func search(query: String, callback: @escaping ([Movie], String?) -> Void) {
         searchText = query
         page = page+1
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-        Api.shared.searchMovies(query: query, language: Utils.getLanguages(), page: page, adult: false, year: nil, callback: { movies, maxPage  in
+        Api.shared.searchMovies(query: query, language: Utils.getLanguages(), page: page, adult: false, year: nil, callback: { movies, maxPage, error in
             self.maxPage = maxPage
             DispatchQueue.main.async {
                 let group = DispatchGroup()
                 for movie in movies {
                     group.enter()
                     Api.shared.getPoster(query: movie.imgURI) { (img) in
-                        movie.img = img
+                        movie.img = img ?? movie.img
                         group.leave()
                     }
                 }
                 group.notify(queue: .main) {
-                    callback(movies)
+                    callback(movies, error)
                 }
             }
         })
     }
 
-    func discover(callback: @escaping ([Movie]) -> Void) {
+    func discover(callback: @escaping ([Movie], String?) -> Void) {
         page = page+1
-        Api.shared.discoverMovies(language: Utils.getLanguages(), page: page, adult: false, callback: { movies, maxPage  in
+        Api.shared.discoverMovies(language: Utils.getLanguages(), page: page, adult: false, callback: { movies, maxPage, error in
             self.maxPage = maxPage
             DispatchQueue.main.async {
                 let group = DispatchGroup()
                 for movie in movies {
                     group.enter()
                     Api.shared.getPoster(query: movie.imgURI) { (img) in
-                        movie.img = img
+                        movie.img = img ?? movie.img
                         group.leave()
                     }
                 }
                 group.notify(queue: .main) {
-                    callback(movies)
+                    callback(movies, error)
                 }
             }
         })
@@ -112,16 +121,26 @@ class FilmsViewModel : FilmDelegate {
         fetchingMore = true
         if page <= maxPage {
             if let query = searchText {
-                search(query: query) { (movies) in
-                    self.moviesList.append(contentsOf: movies)
-                    vc.collection.reloadData()
-                    self.fetchingMore = false
+                search(query: query) { (movies, error) in
+                    if let error = error {
+                        Utils().showError(parentViewController: vc, value: error)
+                        self.fetchingMore = false
+                    } else {
+                        self.moviesList.append(contentsOf: movies)
+                        vc.collection.reloadData()
+                        self.fetchingMore = false
+                    }
                 }
             } else {
-                discover { (movies) in
-                    self.moviesList.append(contentsOf: movies)
-                    vc.collection.reloadData()
-                    self.fetchingMore = false
+                discover { (movies, error) in
+                    if let error = error {
+                        Utils().showError(parentViewController: vc, value: error)
+                        self.fetchingMore = false
+                    } else {
+                        self.moviesList.append(contentsOf: movies)
+                        vc.collection.reloadData()
+                        self.fetchingMore = false
+                    }
                 }
             }
         } else {
@@ -146,11 +165,16 @@ class FilmsViewModel : FilmDelegate {
                     maxPage = 0
                     vc.playLoader()
                     vc.collection.setContentOffset(.zero, animated: true)
-                    search(query: text) { (movies) in
-                        self.moviesList = []
-                        self.moviesList.append(contentsOf: movies)
-                        vc.collection.reloadData()
-                        vc.dismissLoader()
+                    search(query: text) { (movies, error) in
+                        if let error = error {
+                            Utils().showError(parentViewController: vc, value: error)
+                            vc.dismissLoader()
+                        } else {
+                            self.moviesList = []
+                            self.moviesList.append(contentsOf: movies)
+                            vc.collection.reloadData()
+                            vc.dismissLoader()
+                        }
                     }
                     vc.closeSearchBar()
                 }

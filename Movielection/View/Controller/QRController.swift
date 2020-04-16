@@ -10,24 +10,54 @@ import UIKit
 import AVFoundation
 
 class QRController: UIViewController {
+    var vm = QRViewModel()
+}
 
-    let vm = QRViewModel()
+//MARK: View Lifecycle
 
+extension QRController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        vm.setUp(self)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        vm.start()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        vm.stop()
     }
 }
 
-extension QRController : AVCapturePhotoCaptureDelegate, AVCaptureMetadataOutputObjectsDelegate {
-    
-    // Find a camera with the specified AVCaptureDevicePosition, returning nil if one is not found
-    func cameraWithPosition(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        return vm.cameraWithPosition(position)
+//MARK: - Style methods
+
+extension QRController {
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
-    
-    func metadataOutput(_ captureOutput: AVCaptureMetadataOutput,
-                        didOutput metadataObjects: [AVMetadataObject],
-                        from connection: AVCaptureConnection) {
-        vm.readMetadata(metadataObjects)
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
     }
 }
+
+// MARK: - Capture Metadata Output
+
+extension QRController: AVCaptureMetadataOutputObjectsDelegate {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        vm.captureSession.stopRunning()
+        if let metadataObject = metadataObjects.first {
+            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
+            guard let stringValue = readableObject.stringValue else { return }
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            vm.found(self, code: stringValue)
+        }
+
+        dismiss(animated: true)
+    }
+}
+
+

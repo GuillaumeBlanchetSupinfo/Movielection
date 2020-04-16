@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import UIKit
 
 class FilmDetailsViewModel {
     var movie: Movie!
@@ -42,7 +41,7 @@ class FilmDetailsViewModel {
         vc.activityIndicator.isHidden = false
         Api.shared.getTrailer(id: movie.id, language: Utils.getLanguages()) { (url) in
             DispatchQueue.main.async {
-                self.trailer(url: url)
+                !url.isEmpty ? self.trailer(url: url) : Utils().showError(parentViewController: vc, value: "No trailer was found")
                 vc.activityIndicator.stopAnimating()
                 vc.activityIndicator.isHidden = true
                 vc.playTrailer.isHidden = false

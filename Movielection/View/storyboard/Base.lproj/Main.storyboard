@@ -156,6 +156,21 @@
             </objects>
             <point key="canvasLocation" x="757.97101449275374" y="273.88392857142856"/>
         </scene>
+        <!--Controller-->
+        <scene sceneID="nTO-fA-QtU">
+            <objects>
+                <viewController storyboardIdentifier="QRVC" id="Hap-Ni-3n9" customClass="QRController" customModule="Movielection" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hzk-wQ-jYo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="rNb-cf-mBO"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tSR-T6-yAK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-110" y="984"/>
+        </scene>
         <!--Election Controller-->
         <scene sceneID="xLb-nJ-Kvb">
             <objects>
@@ -311,7 +326,11 @@
                         <viewLayoutGuide key="safeArea" id="QIN-kG-NNz"/>
                     </view>
                     <navigationItem key="navigationItem" id="qct-zZ-6o2">
-                        <barButtonItem key="rightBarButtonItem" image="qrcode" catalog="system" id="fZ0-D5-ego"/>
+                        <barButtonItem key="rightBarButtonItem" image="qrcode" catalog="system" id="fZ0-D5-ego">
+                            <connections>
+                                <action selector="qrAction:" destination="UP6-W9-y0c" id="VXS-xS-mEu"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collection" destination="4Ty-qg-sI8" id="6A8-uf-1eR"/>
