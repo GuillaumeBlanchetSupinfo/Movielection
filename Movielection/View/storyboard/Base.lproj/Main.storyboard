@@ -517,7 +517,7 @@
         <!--Film Details Controller-->
         <scene sceneID="plS-ac-7Oo">
             <objects>
-                <viewController id="jmS-Tr-wSy" customClass="FilmDetailsController" customModule="Movielection" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="jmS-Tr-wSy" customClass="FilmDetailsController" customModule="Movielection" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CeY-R0-Fng">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="769"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
