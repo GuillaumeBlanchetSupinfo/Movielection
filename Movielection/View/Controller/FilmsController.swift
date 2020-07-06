@@ -28,6 +28,7 @@ class FilmsController: UIViewController  {
 extension FilmsController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.prefersLargeTitles = true
         vm.setUp(vc: self)
     }
 

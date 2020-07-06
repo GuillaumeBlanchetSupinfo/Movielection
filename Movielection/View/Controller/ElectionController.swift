@@ -30,6 +30,7 @@ extension ElectionController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collection.frame.size = self.view.frame.size
+        vm.registerListener(observer: self)
     }
 }
 
@@ -85,5 +86,13 @@ extension ElectionController {
 
     func dismissLoader() {
         alert.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - Films form QR Delegate
+
+extension ElectionController: FilmFromQRDelegate {
+    func added() {
+        collection.reloadData()
     }
 }

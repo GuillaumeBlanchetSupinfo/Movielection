@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Films Controller-->
+        <!--Movielection-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="FilmsController" customModule="Movielection" customModuleProvider="target" sceneMemberID="viewController">
@@ -37,7 +37,7 @@
                                                     <rect key="frame" x="8" y="8" width="191" height="270"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="affiche" translatesAutoresizingMaskIntoConstraints="NO" id="Pwh-f4-6WA">
-                                                            <rect key="frame" x="0.0" y="0.0" width="191" height="270"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="191" height="270.00000000000011"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                     <real key="value" value="10"/>
@@ -133,7 +133,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LB7-1B-Ttt"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Y06-Gr-Y7E">
+                    <navigationItem key="navigationItem" title="Movielection" id="Y06-Gr-Y7E">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="hc2-8d-ucO">
                             <connections>
                                 <action selector="search:" destination="BYZ-38-t0r" id="Icj-gD-dDW"/>
@@ -171,7 +171,7 @@
             </objects>
             <point key="canvasLocation" x="-110" y="984"/>
         </scene>
-        <!--Election Controller-->
+        <!--Vos Films-->
         <scene sceneID="xLb-nJ-Kvb">
             <objects>
                 <viewController id="UP6-W9-y0c" customClass="ElectionController" customModule="Movielection" customModuleProvider="target" sceneMemberID="viewController">
@@ -200,7 +200,7 @@
                                                     <rect key="frame" x="8" y="8" width="191" height="270"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="affiche" translatesAutoresizingMaskIntoConstraints="NO" id="xb7-wj-b8h">
-                                                            <rect key="frame" x="0.0" y="0.0" width="191" height="270"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="191" height="270.00000000000011"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                     <real key="value" value="10"/>
@@ -325,7 +325,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QIN-kG-NNz"/>
                     </view>
-                    <navigationItem key="navigationItem" id="qct-zZ-6o2">
+                    <navigationItem key="navigationItem" title="Vos Films" id="qct-zZ-6o2">
                         <barButtonItem key="rightBarButtonItem" image="qrcode" catalog="system" id="fZ0-D5-ego">
                             <connections>
                                 <action selector="qrAction:" destination="UP6-W9-y0c" id="VXS-xS-mEu"/>
@@ -349,6 +349,12 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="bjY-EJ-IZJ"/>
@@ -367,7 +373,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="affiche" translatesAutoresizingMaskIntoConstraints="NO" id="8sD-O8-uXa">
-                                <rect key="frame" x="0.0" y="44" width="278" height="390"/>
+                                <rect key="frame" x="0.0" y="44" width="278" height="390.00000000000011"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="8sD-O8-uXa" secondAttribute="height" multiplier="191:270" constant="2.1111111111111995" id="b5C-w4-sxT"/>
                                 </constraints>
@@ -449,7 +455,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="affiche" translatesAutoresizingMaskIntoConstraints="NO" id="Atk-Ef-gb8">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="599"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="599.00000000000011"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Atk-Ef-gb8" secondAttribute="height" multiplier="414:599" id="k2U-B8-md7"/>
                                 </constraints>
@@ -578,7 +584,7 @@
                                                             <rect key="frame" x="8" y="8" width="191" height="270"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="affiche" translatesAutoresizingMaskIntoConstraints="NO" id="gs2-oU-Opj">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="191" height="270"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="191" height="270.00000000000011"/>
                                                                     <userDefinedRuntimeAttributes>
                                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                             <real key="value" value="10"/>

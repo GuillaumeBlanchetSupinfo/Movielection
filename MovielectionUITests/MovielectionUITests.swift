@@ -28,12 +28,6 @@ class MovielectionUITests: XCTestCase {
         app.launch()
     }
 
-    func testScrollDownMain() {
-        let app = XCUIApplication()
-        app.launch()
-        XCUIApplication().collectionViews.children(matching: .cell).element(boundBy: 3).children(matching: .other).element.swipeUp()
-    }
-
     func testReloadMain() {
         let app = XCUIApplication()
         app.launch()
@@ -142,6 +136,15 @@ class MovielectionUITests: XCTestCase {
         app.alerts["Oups"].scrollViews.otherElements.buttons["OK"].tap()
     }
     
+    func testGoToSelectedFormMainThenThenQRReader() {
+        let app = XCUIApplication()
+        app.launch()
+        app.navigationBars["Movielection.Films"].children(matching: .button).matching(identifier: "Item").element(boundBy: 1).tap()
+        app.navigationBars["Movielection.Election"].buttons["qrcode"].tap()
+        app.sheets.scrollViews.otherElements.buttons["Lire un QR Code"].tap()
+        
+    }
+
     func testGoTo3DetailFormMainAddItThenBackThenGoToSelectedThenQRMaker() {
         let app = XCUIApplication()
         app.launch()
@@ -163,6 +166,16 @@ class MovielectionUITests: XCTestCase {
         app.navigationBars["Movielection.Election"].buttons["qrcode"].tap()
         app.sheets.scrollViews.otherElements.buttons["Crée un QR Code de vos films"].tap()
         app.alerts.scrollViews.otherElements.buttons["OK"].tap()
+    }
+
+    func testGoToSelectedThenGetSelectedMovie() {
+        let app = XCUIApplication()
+        app.launch()
+        app.navigationBars["Movielection.Films"].children(matching: .button).matching(identifier: "Item").element(boundBy: 1).tap()
+        let selectAMovieButton = app.buttons["Select a movie"]
+        selectAMovieButton.tap()
+        let okButton = app.alerts["Oups"].scrollViews.otherElements.buttons["OK"]
+        okButton.tap()
     }
 
     func testGoToDetailFormMainThenWatchDetails() {

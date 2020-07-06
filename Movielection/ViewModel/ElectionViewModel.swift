@@ -12,6 +12,7 @@ class ElectionViewModel: QRDelegate {
 
     var selectedMovies: [Movie] = []
     let utils = Utils()
+    var observers : [FilmFromQRDelegate] = [FilmFromQRDelegate]()
 
     func election(movies: [Movie]) -> Movie? {
         guard let movie = movies.randomElement() else {
@@ -28,7 +29,7 @@ class ElectionViewModel: QRDelegate {
         if let movie = election(movies: selectedMovies) {
             utils.showAlert(payload: alertPayload, parentViewController: vc, theMovie: movie)
         } else {
-            return // ici rajouter une erreur.
+            utils.showError(parentViewController: vc, value: "Tu n'as pas de films dans ta liste...")
         }
     }
 
@@ -46,20 +47,28 @@ class ElectionViewModel: QRDelegate {
         if query.count != 0 {
             Utils().showGeneratedQR(parentViewController: vc, qr: QRServices.createQRCode(query: query))
         } else {
-            Utils().showError(parentViewController: vc, value: "You haven't movie in your list")
+            Utils().showError(parentViewController: vc, value: "Tu n'as pas de films dans ta liste...")
         }
     }
 
     func result(_ values: [String]) {
-//        DispatchQueue.main.async {
-//            for value in values {
-//                if let id = Int(value) {
-//                    self.getMovie(id) { movie, error in
-//
-//                    }
-//                }
-//            }
-//        }
+        DispatchQueue.main.async {
+            let group = DispatchGroup()
+            for value in values {
+                group.enter()
+                if let id = Int(value) {
+                    self.getMovie(id) { movie, error in
+                        self.selectedMovies.append(contentsOf: movie)
+                        group.leave()
+                    }
+                }
+            }
+            group.notify(queue: .main) {
+                for observer in self.observers {
+                    observer.added()
+                }
+            }
+        }
     }
 
     func getMovie(_ id: Int, callback: @escaping ([Movie], String?) -> Void ) {
@@ -83,5 +92,9 @@ class ElectionViewModel: QRDelegate {
     func readQRCode(_ vc: ElectionController, _ qrvc: QRController) {
         qrvc.vm.registerListener(observer: vc.vm)
         vc.show(qrvc, sender: nil)
+    }
+    
+    func registerListener(observer : FilmFromQRDelegate) {
+        observers.append(observer)
     }
 }

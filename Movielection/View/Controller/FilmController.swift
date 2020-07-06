@@ -20,6 +20,7 @@ class FilmController: UIViewController {
 extension FilmController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         scroll.frame.size.width = self.view.frame.size.width
         scroll.frame.size.height = self.view.frame.size.height - (self.view.frame.size.height * 0.115)
         heightScroll.constant = scroll.frame.size.height + (scroll.frame.size.height * 0.406)
